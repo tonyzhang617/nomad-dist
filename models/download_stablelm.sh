@@ -1,0 +1,2 @@
+wget -O stablelm-3b-4e1t.Q4_0.gguf https://huggingface.co/maddes8cht/stabilityai-stablelm-3b-4e1t-gguf/resolve/main/stabilityai-stablelm-3b-4e1t-Q4_0.gguf?download=true
+wget -O stablelm-3b-4e1t.Q8_0.gguf https://huggingface.co/maddes8cht/stabilityai-stablelm-3b-4e1t-gguf/resolve/main/stabilityai-stablelm-3b-4e1t-Q8_0.gguf?download=true

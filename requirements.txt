@@ -1,0 +1,4 @@
+datasets==2.17.1
+faiss-cpu==1.7.4
+numpy>=1.20.0
+tqdm==4.66.2
