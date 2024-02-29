@@ -51,6 +51,7 @@ Download the models LLaMA-2-7B and StableLM-3B-4E1T:
 cd models
 bash download_llama2.sh
 bash download_stablelm.sh
+cd ..
 ```
 
 To download LLaMA-2, you need to obtain [an API key](https://llama.meta.com/llama-downloads) from META first. 
@@ -61,14 +62,14 @@ To reproduce the perplexity results from our paper, use the following commands.
 
 Perplexity of StableLM-3B-4E1T (q8_0 quantized) with NoMAD-Attention ($d_\mathrm{sub}=1$) on `WikiText-2` and `PTB`:
 ```bash
-./app/bin/perplexity -m models/codellama-7b.Q8_0.gguf -pi assets/stablelm-3b-dsub1 -f data/wikitext-2-raw/wiki.test.raw -c 512
-./app/bin/perplexity -m models/codellama-7b.Q8_0.gguf -pi assets/stablelm-3b-dsub1 -f data/ptb/test.txt -c 512
+./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -pi assets/stablelm-3b-dsub1 -f data/wikitext-2-raw/wiki.test.raw -c 512
+./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -pi assets/stablelm-3b-dsub1 -f data/ptb/test.txt -c 512
 ```
 
 Perplexity of StableLM-3B-4E1T (q8_0 quantized) with the original Attention on `WikiText-2` and `PTB`:
 ```bash
-./app/bin/perplexity -m models/codellama-7b.Q8_0.gguf -f data/wikitext-2-raw/wiki.test.raw -c 512
-./app/bin/perplexity -m models/codellama-7b.Q8_0.gguf -f data/ptb/test.txt -c 512
+./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -f data/wikitext-2-raw/wiki.test.raw -c 512
+./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -f data/ptb/test.txt -c 512
 ```
 
 ## Using Your LLM with NoMAD-Attention
