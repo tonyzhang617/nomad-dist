@@ -6,11 +6,6 @@ Welcome to NoMAD-Attention, a groundbreaking solution designed to enhance the ef
 
 NoMAD-Attention utilizes in-register shuffles, a unique CPU capability, to replace traditional MAD operations with efficient lookups. This approach allows for rapid computation of attention scores, even with the limited sizes of SIMD registers. It is compatible with pre-trained attention-based LLMs and does not require model finetuning. Our empirical evaluations show that NoMAD-Attention can double the speed of a 4-bit quantized LLaMA-7B model for a 16k context length, all while maintaining the original model's quality.
 
-![Speedup](figures/llama_speedup.png)
-![Latency](figures/time_breakdown.png)
-
-As seen in the figure of above, NoMAD-Attention-based models achieve significant speedup over their Attention-based counterparts on prompt processing and decoding while significantly reducing latency compared to other efficiency models. At the context length of 16k, NoMAD-Attention-based CodeLlama-7B (4-bit weights) achieves $2\times$ speedup over the original CodeLlama-7B (4-bit weights) while significantly reducing the latency of attention score computations over Attention.
-
 **Important**: This repository only contains the executable binaries for NoMAD-Attention, with no source code. We are in the process of patent application for NoMAD-Attention. Thank you for your understanding.
 
 ## Getting Started
@@ -153,3 +148,8 @@ Our paper's perplexity results can be reproduced using the following commands fo
 # Runs perplexity on the test set of PTB (Penn Tree Bank) using the quantized model stablelm-3b-4e1t.Q8_0.gguf with the original attention
 ./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -f data/ptb/test.txt -c 512
 ```
+
+![Speedup](figures/llama_speedup.png)
+![Latency](figures/time_breakdown.png)
+
+As seen in the figure of above, NoMAD-Attention-based models achieve significant speedup over their Attention-based counterparts on prompt processing and decoding while significantly reducing latency compared to other efficiency models. At the context length of 16k, NoMAD-Attention-based CodeLlama-7B (4-bit weights) achieves $2\times$ speedup over the original CodeLlama-7B (4-bit weights) while significantly reducing the latency of attention score computations over Attention.
