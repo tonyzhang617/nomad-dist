@@ -43,7 +43,7 @@ python data/download.py
 
 ### Quick Start
 
-To quickly see NoMAD-Attention in action with CodeLLaMA-7B, navigate to the `models` directory, download the model, and execute it with NoMAD-Attention. Detailed commands for running the model and comparing performance with traditional attention methods are provided.
+To quickly see NoMAD-Attention in action with CodeLLaMA-7B, navigate to the `models` directory, download the model, and execute it with NoMAD-Attention. Detailed commands for running the model and comparing performance with traditional attention methods are listed below.
 
 1. **Execute CodeLLaMA-7B with NoMAD-Attention**
     Generate 16384 tokens with CodeLLaMA-7B using NoMAD-Attention.
