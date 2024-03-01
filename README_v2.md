@@ -105,12 +105,12 @@ NoMAD-Attention can be adapted to your LLM without retraining. You will need to 
         ```
 
     - Parameters:
-        - `--paths`: Specifies the paths to the saved attention keys.
-        - `--save_path`: Specifies the directory to save the learned codebooks.
-        - `--range`: Specifies the range of attention layers and heads. The range is calculated as (0, num_of_layers * num_of_attn_heads). For instance, CodeLLaMA-7B has 32 layers and 32 attention heads, hence the range is (0, 1024).
-        - `--d_sub`: Specifies the dimension in each sub-quantizer. A value of 1 preserves model quality well.
-        - `--niter`: Specifies the number of iterations for k-means.
-        - `--dim`: Specifies the dimensionality of the attention key embeddings.
+        - `--paths` specifies the paths to the saved attention keys.
+        - `--save_path` specifies the directory to save the learned codebooks.
+        - `--range` specifies the range of attention layers and heads. The range is calculated as (0, num_of_layers * num_of_attn_heads). For instance, CodeLLaMA-7B has 32 layers and 32 attention heads, hence the range is (0, 1024).
+        - `--d_sub` specifies the dimension in each sub-quantizer. A value of 1 preserves model quality well.
+        - `--niter` specifies the number of iterations for k-means.
+        - `--dim` specifies the dimensionality of the attention key embeddings.
 
 3. **Test Your Model with NoMAD-Attention**
     - Once the codebooks are ready, you can test your model with NoMAD-Attention.
