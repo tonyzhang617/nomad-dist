@@ -149,7 +149,7 @@ Our paper's perplexity results can be reproduced using the following commands fo
 ./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -f data/ptb/test.txt -c 512
 ```
 
+As seen in the figures below, NoMAD-Attention-based models achieve significant speedup over their Attention-based counterparts on prompt processing and decoding while significantly reducing latency compared to other efficiency models. At the context length of 16k, NoMAD-Attention-based CodeLlama-7B (4-bit weights) achieves $2\times$ speedup over the original CodeLlama-7B (4-bit weights) while significantly reducing the latency of attention score computations over Attention.
+
 ![Speedup](figures/llama_speedup.png)
 ![Latency](figures/time_breakdown.png)
-
-As seen in the figure of above, NoMAD-Attention-based models achieve significant speedup over their Attention-based counterparts on prompt processing and decoding while significantly reducing latency compared to other efficiency models. At the context length of 16k, NoMAD-Attention-based CodeLlama-7B (4-bit weights) achieves $2\times$ speedup over the original CodeLlama-7B (4-bit weights) while significantly reducing the latency of attention score computations over Attention.
