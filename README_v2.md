@@ -1,4 +1,4 @@
-# NoMAD-Attention: Boost LLM Inference Efficiency on CPUs
+# NoMAD-Attention: Boosting LLM Inference Efficiency on CPUs
 
 Welcome to NoMAD-Attention, a groundbreaking solution designed to enhance the efficiency of Large Language Model (LLM) inference on CPUs. By innovating attention computations to be Multiply-add (MAD) free, NoMAD-Attention significantly reduces the computational load, making LLMs faster and more accessible for CPU users. Here's how you can leverage NoMAD-Attention for your projects:
 
