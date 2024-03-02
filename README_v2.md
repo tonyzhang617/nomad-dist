@@ -77,7 +77,7 @@ NoMAD-Attention can be adapted to your LLM without retraining. You will need to 
 
 1. **Perform Model Inference on a Learning Corpus**
     - Begin by running your model on a learning corpus to save its attention key embeddings. This corpus does not need to be large; the objective is to ensure the model captures the necessary attention patterns.
-    - Before running the command, create a directory to save the attention key embeddings. For this example, create a directory named `codellama-7b-wikitext2-valid-keys` in the `assets` directory.
+    - Before running the command, create a directory to save the attention key embeddings. Create a directory named `codellama-7b-wikitext2-valid-keys` in the `assets` directory.
 
         ```bash
         # Create a directory to save the attention key embeddings
