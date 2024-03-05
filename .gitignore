@@ -1,3 +1,12 @@
 data/*/
 *.gguf
 *.log
+
+# Ignore all .index files in the repository
+*.index
+
+# Ignore the llama-2-7b model directory
+models/llama-2-7b/
+
+# Ignore run_sequence.sh file
+run_sequence.sh
