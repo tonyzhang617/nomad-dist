@@ -1,6 +1,6 @@
 # NoMAD-Attention: Enhancing LLM Inference Efficiency on CPUs
 
-[[Paper (arXiv)]](https://arxiv.org/abs/2403.01273)
+[[Paper]](https://arxiv.org/abs/2403.01273)
 
 
 NoMAD-Attention introduces an innovative attention algorithm designed to drastically improve the efficiency of Large Language Model (LLM) inference on CPUs, leveraging unique computational methods to accelerate processing speeds without compromising model quality.
