@@ -8,8 +8,9 @@ data/*/
 # Ignore the llama-2-7b model directory
 models/llama-2-7b/
 
-# Ignore run_sequence.sh file
+# Ignore run_sequence.sh file & run_stablelm_with_nomad.sh
 run_sequence.sh
+run_stablelm_with_nomad.sh
 
 # Ignore _archived dir and its contents
 _archived/
