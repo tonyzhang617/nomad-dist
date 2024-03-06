@@ -21,9 +21,6 @@ def setup_logging():
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
-# This is a test for git diff
-def sample_function():
-    print("This is a sample function")
 
 def create_directories(save_path, overwrite):
     if os.path.exists(save_path) and not overwrite:
