@@ -100,16 +100,19 @@ NoMAD-Attention can be adapted to your LLM without retraining. You will need to 
     - Use this command to generate codebooks from the saved attention keys:
 
         ```bash
-        python learn_codebooks.py --paths assets/codellama-7b-wikitext2-valid-keys --save_path assets/codellama-7b-wikitext2-valid-codebooks --range 0 1024 --d_sub 1 --niter 100 --dim 128
+        python learn_codebooks.py --model_name codellama-7b --paths assets/codellama-7b-wikitext2-valid-keys --save_path assets/codellama-7b-wikitext2-valid-codebooks --range 0 1024 --d_sub 1 --niter 100 --dim 128 --overwrite
         ```
 
     - Parameters:
+        - `model-name` specifies the specific model name (e.g., `codellama-7b`, `stablelm-3b-4e1t.Q4_0`, etc.).
         - `--paths` specifies the paths to the saved attention keys.
         - `--save_path` specifies the directory to save the learned codebooks.
         - `--range` specifies the range of attention layers and heads. The range is calculated as (0, num_of_layers * num_of_attn_heads). For instance, CodeLLaMA-7B has 32 layers and 32 attention heads, hence the range is (0, 1024).
         - `--d_sub` specifies the dimension in each sub-quantizer. A value of 1 preserves model quality well.
         - `--niter` specifies the number of iterations for k-means.
         - `--dim` specifies the dimensionality of the attention key embeddings.
+        - `--overwrite` overwrites the existing .index files if they exist.
+            - _Note_: if the `--overwrite` flag is not set, but the `--save_path` directory already exists, the command will fail and the error is logged in the generated .log file.
 
 3. **Test Your Model with NoMAD-Attention**
     - Once the codebooks are ready, you can test your model with NoMAD-Attention.
