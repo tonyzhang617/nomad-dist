@@ -1,11 +1,19 @@
 # NoMAD-Attention: Enhancing LLM Inference Efficiency on CPUs
 
-- NoMAD-Attention introduces an innovative attention algorithm that eliminates the need for Multiply-add (MAD) operations through the use of efficient lookups, substantially enhancing the efficiency of Large Language Model (LLM) inference on CPUs.
-- By leveraging in-register shuffles—a unique capability of CPUs—NoMAD-Attention is able to perform attention computations without the traditional MAD operations, significantly reducing computational overhead and accelerating inference times for CPU-based LLMs.
-- This methodology not only ensures rapid computation of attention scores despite the limited sizes of SIMD registers but also retains compatibility with existing pre-trained attention-based LLMs without necessitating model retraining.
-- Our empirical evidence indicates that NoMAD-Attention can effectively double the processing speed of a 4-bit quantized LLaMA-7B model for a 16k context length while preserving the model's original quality.
+[[Paper (arXiv)]](https://arxiv.org/abs/2403.01273)
 
-**Important Notice**: Currently, this repository provides only the executable binaries for NoMAD-Attention, as the source code is not available. We are in the process of applying for a **patent** for NoMAD-Attention and appreciate your understanding in this matter.
+
+NoMAD-Attention introduces an innovative attention algorithm designed to drastically improve the efficiency of Large Language Model (LLM) inference on CPUs, leveraging unique computational methods to accelerate processing speeds without compromising model quality.
+
+## Approach
+
+NoMAD-Attention revolutionizes LLM inference by eliminating the need for traditional Multiply-add (MAD) operations, utilizing efficient lookups and in-register shuffles—a capability uniquely suited to CPUs. This approach significantly reduces computational overhead, enabling faster inference times for CPU-based LLMs while maintaining compatibility with pre-trained attention-based models.
+
+By sidestepping MAD operations, NoMAD-Attention _doubles_ the processing speed of a 4-bit quantized LLaMA-7B model for a 16k context length, ensuring the model's original quality is preserved.
+
+![fig1_keycache](figures/figure1_keycache_illustration.png)
+
+**Important Notice**: Currently, the repository offers executable binaries for NoMAD-Attention as the source code undergoes a patent application process. We appreciate your understanding and patience.
 
 ## Getting Started
 
@@ -100,17 +108,17 @@ NoMAD-Attention can be adapted to your LLM without retraining. You will need to 
     - Use this command to generate codebooks from the saved attention keys:
 
         ```bash
-        python learn_codebooks.py --model_name codellama-7b --paths assets/codellama-7b-wikitext2-valid-keys --save_path assets/codellama-7b-wikitext2-valid-codebooks --range 0 1024 --d_sub 1 --niter 100 --dim 128 --overwrite
+        # this command will dynamically determine the vector dimensions needed
+        # if you already know the dimensions, you can specify them with the --dim flag
+        python learn_codebooks.py --paths assets/codellama-7b-wikitext2-valid-keys --save_path assets/codellama-7b-wikitext2-valid-codebooks --range 0 1024 --d_sub 1 --niter 100 --overwrite
         ```
 
     - Parameters:
-        - `model-name` specifies the specific model name (e.g., `codellama-7b`, `stablelm-3b-4e1t.Q4_0`, etc.).
         - `--paths` specifies the paths to the saved attention keys.
         - `--save_path` specifies the directory to save the learned codebooks.
         - `--range` specifies the range of attention layers and heads. The range is calculated as (0, num_of_layers * num_of_attn_heads). For instance, CodeLLaMA-7B has 32 layers and 32 attention heads, hence the range is (0, 1024).
         - `--d_sub` specifies the dimension in each sub-quantizer. A value of 1 preserves model quality well.
         - `--niter` specifies the number of iterations for k-means.
-        - `--dim` specifies the dimensionality of the attention key embeddings.
         - `--overwrite` overwrites the existing .index files if they exist.
             - _Note_: if the `--overwrite` flag is not set, but the `--save_path` directory already exists, the command will fail and the error is logged in the generated .log file.
 
