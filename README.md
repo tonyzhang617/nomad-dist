@@ -159,6 +159,6 @@ Our paper's perplexity results can be reproduced using the following commands fo
 ./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -f data/ptb/test.txt -c 512
 ```
 
-As seen in the figure below, NoMAD-Attention-based models (blue) vs. their Attention-based counterparts (red) take roughly _$x2$ less time to generate 16k tokens (decoding time)_ at _$x2$ speed (tokens/second)_.    
+As seen in the figure below, NoMAD-Attention-based models (blue) vs. their Attention-based counterparts (red) take roughly _**x2** less time to generate 16k tokens (decoding time)_ at _**x2** speed (tokens/second)_.
 
 ![alt text](figures/llama_speedup_w_caption.png)
