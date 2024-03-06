@@ -10,3 +10,6 @@ models/llama-2-7b/
 
 # Ignore run_sequence.sh file
 run_sequence.sh
+
+# Ignore _archived dir and its contents
+_archived/
