@@ -1,97 +1,154 @@
-# NoMAD-Attention: Efficient LLM Inference on CPUs Through Multiply-add-free Attention
+# NoMAD-Attention: Enhancing LLM Inference Efficiency on CPUs
 
-Large language model (LLM) inference on Central Processing Units (CPU) is challenging due to the vast quantities of expensive Multiply-add (MAD) matrix operations in the attention computations. Therefore, we leverage in-register shuffles, a unique capability of CPUs, to propose NoMAD-Attention, an efficient attention algorithm that replaces MAD operations with lookups. Through hardware-aware algorithmic designs, NoMAD-Attention achieves the computation of attention scores using repeated fast accesses to SIMD registers despite their highly limited sizes. Moreover, NoMAD-Attention works with pre-trained attention-based LLMs without model finetuning. Empirical evaluations demonstrate that NoMAD-Attention maintains the quality of the original LLMs well, and speeds up the 4-bit quantized LLaMA-7B-based model by up to 2x at 16k context length. 
+- NoMAD-Attention introduces an innovative attention algorithm that eliminates the need for Multiply-add (MAD) operations through the use of efficient lookups, substantially enhancing the efficiency of Large Language Model (LLM) inference on CPUs.
+- By leveraging in-register shuffles—a unique capability of CPUs—NoMAD-Attention is able to perform attention computations without the traditional MAD operations, significantly reducing computational overhead and accelerating inference times for CPU-based LLMs.
+- This methodology not only ensures rapid computation of attention scores despite the limited sizes of SIMD registers but also retains compatibility with existing pre-trained attention-based LLMs without necessitating model retraining.
+- Our empirical evidence indicates that NoMAD-Attention can effectively double the processing speed of a 4-bit quantized LLaMA-7B model for a 16k context length while preserving the model's original quality.
 
-**Note** This repository only contains the executable binaries for NoMAD-Attention, with no source code. We are in the process of patent application for NoMAD-Attention. Thank you for your understanding.
+**Important Notice**: Currently, this repository provides only the executable binaries for NoMAD-Attention, as the source code is not available. We are in the process of applying for a **patent** for NoMAD-Attention and appreciate your understanding in this matter.
 
-## System Requirements
+## Getting Started
 
-1. Linux
+### Prerequisites
 
-2. A CPU that supports Advanced Vector Extensions 2 (AVX2). To check whether your CPU supports AVX2, run `lscpu | grep "avx2"`, which will output one or more matched entries if the CPU supports AVX2, and none otherwise.
+Ensure your system meets these requirements:
+- Linux OS
+- CPU with AVX2 support. Check with `lscpu | grep "avx2"`.
+- OpenBLAS installed. For Ubuntu: `sudo apt-get install libopenblas-dev`.
 
-3. OpenBLAS. On Ubuntu, run `sudo apt-get install libopenblas-dev` to install it.
+### Installation
 
-## Quick Start
+Before you begin, ensure that you are in the `nomad-dist` directory (the parent directory). All subsequent commands should be run from this directory.
 
-This section provides an example of running CodeLLaMA-7B with NoMAD-Attention. The `assets` folder contains the codebooks of some models that have been learned for NoMAD-Attention, including CodeLLaMA-7B, LLaMA-2-7B, and StableLM-3B-4E1T. First, we download the CodeLLaMA-7B model with
-```bash
-cd models
-bash download_codellama.sh
-cd ..
-```
-
-Use the following command to run CodeLLaMA-7B with NoMAD-Attention ($d_\mathrm{sub}=1$) to generate 16384 tokens.
-```bash
-./app/bin/main -m models/codellama-7b.Q4_0.gguf -n 16384 -pi assets/codellama-7b-dsub1 2> codellama_nomad.log
-```
-
-The decoding latency for each token is written to the log file `codellama_nomad.log`. Let's compare with the speed of the original dot-product attention by running the following command, which writes to the log file `codellama_attn.log`.
-
-```bash
-./app/bin/main -m models/codellama-7b.Q4_0.gguf -n 16384 2> codellama_attn.log
-```
-
-## Datasets and Models
-
-Install the required packages:
+1. **Install Dependencies**: Install the necessary packages by running the following command:
 ```bash
 pip install -r requirements.txt
 ```
 
-Download the datasets `WikiText-2` and `PTB` for perplexity testing:
+2. **Download Models**: Download the models CodeLLaMA-7B, LLaMA-2-7B, and StableLM-3B-4E1T by running the following commands:
+    - _Note_: To download LLaMA-2, you need to obtain [an API key](https://llama.meta.com/llama-downloads) from Meta first.
 ```bash
-cd data
-python download.py
-cd ..
+bash models/download_codellama.sh
+bash models/download_stablelm.sh
+
+# Acquire API Key from Meta for LLaMA-2 before running the following command
+bash models/download_llama2.sh
 ```
 
-Download the models LLaMA-2-7B and StableLM-3B-4E1T:
+3. **Acquire Datasets**: Download the WikiText-2 and PTB datasets for testing by running the following command:
 ```bash
-cd models
-bash download_llama2.sh
-bash download_stablelm.sh
-cd ..
+python data/download.py
 ```
 
-To download LLaMA-2, you need to obtain [an API key](https://llama.meta.com/llama-downloads) from META first. 
+### Quick Start
 
-## Result Reproduction
+To quickly see NoMAD-Attention in action with CodeLLaMA-7B, navigate to the `models` directory, download the model, and execute it with NoMAD-Attention. Detailed commands for running the model and comparing performance with traditional attention methods are listed below.
 
-To reproduce the perplexity results from our paper, use the following commands.
+1. **Execute CodeLLaMA-7B with NoMAD-Attention**
+    Generate 16384 tokens with CodeLLaMA-7B using NoMAD-Attention.
+    ```bash
+    # Run the main application with the CodeLLaMA-7B model, using NoMAD-Attention, to generate 16384 tokens.
+    # The decoding latency for each token is written to the log file codellama_nomad.log.
+    # Errors and logs are redirected to codellama_nomad.log
+    ./app/bin/main -m models/codellama-7b.Q4_0.gguf -n 16384 -pi assets/codellama-7b-dsub1 2> codellama_nomad.log
+    ```
+    - Parameters:
+        - `-m` specifies the model path
+        - `-n` specifies the number of tokens to generate
+        - `-pi` specifies the path to the model's parameters
 
-Perplexity of StableLM-3B-4E1T (q8_0 quantized) with NoMAD-Attention ($d_\mathrm{sub}=1$) on `WikiText-2` and `PTB`:
+2. **Compare Performance**
+    To compare the performance with the original dot-product attention, run the following command:
+    ```bash
+    # Run the main application with the CodeLLaMA-7B model, using the original dot-product attention, to generate 16384 tokens.
+    # Errors and logs are redirected to codellama_attn.log
+    ./app/bin/main -m models/codellama-7b.Q4_0.gguf -n 16384 2> codellama_attn.log
+    ```
+    - Parameters:
+        - `-m` specifies the model path
+        - `-n` specifies the number of tokens to generate
+
+## Advanced Usage
+
+### How to Adapt Your LLM to NoMAD-Attention?
+
+NoMAD-Attention can be adapted to your LLM without retraining. You will need to generate new codebooks by saving attention key embeddings from your model, then perform k-means clustering to learn the codebooks. Step-by-step instructions for this process are detailed, including commands for saving attention keys and learning codebooks.
+
+1. **Perform Model Inference on a Learning Corpus**
+    - Begin by running your model on a learning corpus to save its attention key embeddings. This corpus does not need to be large; the objective is to ensure the model captures the necessary attention patterns.
+    - Before running the command, create a directory to save the attention key embeddings. Create a directory named `codellama-7b-wikitext2-valid-keys` in the `assets` directory.
+
+        ```bash
+        # Create a directory to save the attention key embeddings
+        mkdir -p assets/codellama-7b-wikitext2-valid-keys
+        ```
+    - Example command for saving attention keys for `codellama-7b` on `WikiText-2` validation set:
+
+        ```bash
+        # Runs perplexity on the validation set of WikiText-2 using the model codellama-7b.Q4_0.gguf
+        # Then saves the attention key embeddings to the directory assets/codellama-7b-wikitext2-valid-keys (context length 512)
+        ./app/bin/perplexity -m models/codellama-7b.Q4_0.gguf -c 512 -f data/wikitext-2-raw/wiki.valid.raw -psi assets/codellama-7b-wikitext2-valid-keys
+        ```
+    - Parameters:
+        - `-m` specifies the model path
+        - `-c` the context length
+        - `-f` the text file containing the learning corpus
+        - `-psi` the directory to save the attention key embeddings
+
+2. **Learn Codebooks via k-means Clustering**
+    - After saving the attention keys, perform k-means clustering on these embeddings to learn the codebooks.
+    - Use this command to generate codebooks from the saved attention keys:
+
+        ```bash
+        python learn_codebooks.py --paths assets/codellama-7b-wikitext2-valid-keys --save_path assets/codellama-7b-wikitext2-valid-codebooks --range 0 1024 --d_sub 1 --niter 100 --dim 128
+        ```
+
+    - Parameters:
+        - `--paths` specifies the paths to the saved attention keys.
+        - `--save_path` specifies the directory to save the learned codebooks.
+        - `--range` specifies the range of attention layers and heads. The range is calculated as (0, num_of_layers * num_of_attn_heads). For instance, CodeLLaMA-7B has 32 layers and 32 attention heads, hence the range is (0, 1024).
+        - `--d_sub` specifies the dimension in each sub-quantizer. A value of 1 preserves model quality well.
+        - `--niter` specifies the number of iterations for k-means.
+        - `--dim` specifies the dimensionality of the attention key embeddings.
+
+3. **Test Your Model with NoMAD-Attention**
+    - Once the codebooks are ready, you can test your model with NoMAD-Attention.
+    - For instance, to generate text with `codellama-7b` using the new codebooks:
+
+        ```bash
+        # Runs the main application with the CodeLLaMA-7B model, using the newly learned codebooks for NoMAD-Attention, to generate 1024 tokens.
+        # Errors and logs are discarded.
+        ./app/bin/main -m models/codellama-7b.Q4_0.gguf -n 1024 -pi assets/codellama-7b-wikitext2-valid-codebooks -p "What does the const keyword mean in C++? Answer: " 2> /dev/null
+        ```
+    - Parameters:
+        - `-m` specifies the model path
+        - `-n` specifies the number of tokens to generate
+        - `-pi` specifies the path to the codebooks
+        - `-p` sets the prompt for generation
+
+### How to Reproduce NoMAD-Attention's Performance From Our Paper?
+
+Our paper's perplexity results can be reproduced using the following commands for the StableLM-3B-4E1T (q8_0 quantized) model:
+
+1. **With NoMAD-Attention ($d_\mathrm{sub}=1$)**: Evaluate on `WikiText-2` and `PTB` datasets using NoMAD-Attention.
 ```bash
+# Runs perplexity on the test set of WikiText-2 using the quantized model stablelm-3b-4e1t.Q8_0.gguf with NoMAD-Attention
 ./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -pi assets/stablelm-3b-dsub1 -f data/wikitext-2-raw/wiki.test.raw -c 512
+
+# Runs perplexity on the test set of PTB (Penn Tree Bank) using the quantized model stablelm-3b-4e1t.Q8_0.gguf with NoMAD-Attention
 ./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -pi assets/stablelm-3b-dsub1 -f data/ptb/test.txt -c 512
 ```
 
-Perplexity of StableLM-3B-4E1T (q8_0 quantized) with the original Attention on `WikiText-2` and `PTB`:
+2. **With Original Attention**: Compare performance on the same datasets using original attention.
 ```bash
+# Runs perplexity on the test set of WikiText-2 using the quantized model stablelm-3b-4e1t.Q8_0.gguf with the original attention
 ./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -f data/wikitext-2-raw/wiki.test.raw -c 512
+
+# Runs perplexity on the test set of PTB (Penn Tree Bank) using the quantized model stablelm-3b-4e1t.Q8_0.gguf with the original attention
 ./app/bin/perplexity -m models/stablelm-3b-4e1t.Q8_0.gguf -f data/ptb/test.txt -c 512
 ```
 
-## Using Your LLM with NoMAD-Attention
+As seen in the figures below, NoMAD-Attention-based models achieve significant speedup over their Attention-based counterparts on prompt processing and decoding while significantly reducing latency compared to other efficiency models. At the context length of 16k, NoMAD-Attention-based CodeLlama-7B (4-bit weights) achieves $2\times$ speedup over the original CodeLlama-7B (4-bit weights) while significantly reducing the latency of attention score computations over Attention.
 
-Adapting your LLM to work with NoMAD-Attention requires no model training. But new codebooks need to be learned first for a new model to work with NoMAD-Attention. To learn codebooks, we first perform model inference on a learning corpus and save its attention key embeddings for each layer and each head separately. Then we perform k-means clustering on the saved attention key embeddings to determine the centroids in each sub-quantizer. This section provides instructions on how your own model can be adapted to NoMAD-Attention by learning codebooks. Currently, NoMAD-Attention are supported for LLaMA-based and StableLM-based LLMs with no multi-query attention.
-
-First, we perform model inference on a corpus and save the attention keys. The corpus does not need to be large in size to ensure good model quality. For example, the following command saves the attention keys of the model `codellama-7b` on the validation set of `WikiText-2` to the directory `assets/codellama-7b-wikitext2-valid-keys`. Warning: this will create a large number of files under the directory. 
-
-```bash
-./app/bin/perplexity -m models/codellama-7b.Q4_0.gguf -c 512 -f data/wikitext-2-raw/wiki.valid.raw -psi assets/codellama-7b-wikitext2-valid-keys
-```
-where `-m` is the model path, `-c` is the context length, `-f` is the text file containing the learning corpus, and `-psi` or `--path-save-index` is the directory in which to save the attention key embeddings (has to be created first).
-
-Next, we perform k-means on the saved attention keys to learn codebooks using the following command, which reads from the directory `assets/codellama-7b-wikitext2-valid-keys` and saves the codebooks to the directory `assets/codellama-7b-wikitext2-valid-codebooks`.
-
-```bash
-python learn_codebooks.py --paths assets/codellama-7b-wikitext2-valid-keys --save_path assets/codellama-7b-wikitext2-valid-codebooks --range 0 1024 --d_sub 1 --niter 100 --dim 128
-```
-where `--paths` is a list of paths containing attention keys, `--save_path` is the directory under which to save the codebooks, `--range` is a pair of numbers (0, num_of_layers * num_of_attn_heads) (codellama-7b has 32 layers and 32 attention heads, hence 1024), `--d_sub` is the dimension in each sub-quantizer (1 preserves model quality well), `--niter` is the number of iterations to run k-means for, and `--dim` is the dimensionality of the attention key embeddings.
-
-Now, the new model is ready with NoMAD-Attention. To try it out, run the following.
-```bash
-./app/bin/main -m models/codellama-7b.Q4_0.gguf -n 1024 -pi assets/codellama-7b-wikitext2-valid-codebooks -p "What does the const keyword mean in C++? Answer: " 2> /dev/null
-```
-where `-p` is the prompt to start generation with.
+![Speedup](figures/llama_speedup.png)
+![Latency](figures/time_breakdown.png)
