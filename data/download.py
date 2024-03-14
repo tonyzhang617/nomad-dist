@@ -11,11 +11,15 @@ def download_and_unzip(url, extract_to='.'):
     zipfile.extractall(path=extract_to)
 
 
-# Download wikitext-2
-download_and_unzip('https://huggingface.co/datasets/ggml-org/ci/resolve/main/wikitext-2-raw-v1.zip')
+# Create the data directory
+os.makedirs("./data", exist_ok=True)
 
-# Download PTB
-os.makedirs("./ptb", exist_ok=True)
+# Download wikitext-2 into the 'data' directory
+download_and_unzip('https://huggingface.co/datasets/ggml-org/ci/resolve/main/wikitext-2-raw-v1.zip', extract_to='./data')
+
+
+# Download PTB under the 'data' directory
+os.makedirs("./data/ptb", exist_ok=True)
 
 for split in ['train', 'validation', 'test']:
     dataset = load_dataset("ptb_text_only", split=split)
@@ -24,5 +28,5 @@ for split in ['train', 'validation', 'test']:
         dataset[i]['sentence'] for i in range(dataset.num_rows)
     ]
 
-    with open(f'./ptb/{split}.txt', 'w') as file:
+    with open(f'./data/ptb/{split}.txt', 'w') as file:
         file.write('\n'.join(sentences))
