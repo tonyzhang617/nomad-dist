@@ -1,1 +1,1 @@
-wget -O codellama-7b.Q4_0.gguf https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q4_0.gguf?download=true
+wget -O models/codellama-7b.Q4_0.gguf https://huggingface.co/TheBloke/CodeLlama-7B-GGUF/resolve/main/codellama-7b.Q4_0.gguf?download=true
